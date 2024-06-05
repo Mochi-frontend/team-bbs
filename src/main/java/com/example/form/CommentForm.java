@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentForm {
-    private String articledId;
+    private String articleId;
     private String name;
     private String content;
 }
