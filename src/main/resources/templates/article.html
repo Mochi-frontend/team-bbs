@@ -1,10 +1,80 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Title</title>
-</head>
-<body>
+  </head>
+  <body>
+    <form
+      th:action="@{/article/insert-article}"
+      method="post"
+      th:object="${articleForm}"
+    >
+      投稿者名：
+      <input type="text" name="name" />
+      <br />
+      投稿内容：
+      <textarea name="content" cols="30" rows="10"></textarea>
+      <br />
+      <button>記事投稿</button>
+    </form>
 
-</body>
+    <hr />
+
+    <div th:each="article:${articleList}">
+      投稿者名：
+      <span th:text="${article.name}">mock</span>
+      <br />
+      投稿内容：
+      <div th:text="${article.content}">mock</div>
+
+      <form th:action="@{/article/delete-article}" method="post">
+        <input type="hidden" name="articleId" th:value="${article.id}" />
+        <button>記事削除</button>
+      </form>
+      <br />
+      <br />
+      <span th:if="${article.commentList != null}">
+        <span th:each="comment:${article.commentList}">
+          コメント者名：
+          <span th:text="${comment.name}">mock</span>
+          <br />
+          コメント内容：
+          <div th:text="${comment.content}">mock</div>
+        </span>
+      </span>
+      <br />
+      <br />
+      <form
+        th:action="@{/article/insert-comment}"
+        method="post"
+        th:object="${commentForm}"
+      >
+        名前：
+        <br />
+        <span th:if="${article.id} == ${commentForm.articleId}">
+          <input type="text" name="name" th:field="*{name}" />
+        </span>
+        <span th:unless="${article.id} == ${commentForm.articleId}">
+          <input type="text" name="name" />
+        </span>
+        コメント：
+        <br />
+        <span th:if="${article.id} == ${commentForm.articleId}">
+          <input type="text" name="content" th:field="*{content}" />
+        </span>
+        <span th:unless="${article.id} == ${commentForm.articleId}">
+          <input type="text" name="content" />
+        </span>
+
+        <br />
+        <span th:if="${article.id} == ${commentForm.articleId}">
+          <span th:errors="*{content}" style="color: red"></span>
+        </span>
+        <br />
+        <input type="hidden" name="articleId" th:value="${article.id}" />
+        <button>コメント投稿</button>
+      </form>
+    </div>
+  </body>
 </html>
