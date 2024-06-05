@@ -27,5 +27,5 @@ public class Comment {
     String content;
     @ManyToOne
     @JoinColumn(name = "article_id",nullable = false)
-    List<Article> articleList;
+    Article article;
 }
